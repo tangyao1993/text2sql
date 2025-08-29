@@ -1,0 +1,42 @@
+{
+  "general_terms": {
+    "客单价": "平均每个用户的消费金额",
+    "GMV": "商品交易总额",
+    "ARPU": "每用户平均收入",
+    "LTV": "用户生命周期价值",
+    "转化率": "完成目标行为的用户比例"
+  },
+  "metrics": {
+    "客单价": "SUM(payment_amount) / COUNT(DISTINCT user_id)",
+    "GMV": "SUM(payment_amount)",
+    "ARPU": "SUM(revenue) / COUNT(DISTINCT user_id)",
+    "复购率": "COUNT(DISTINCT CASE WHEN order_count > 1 THEN user_id END) / COUNT(DISTINCT user_id)",
+    "转化率": "COUNT(DISTINCT converted_user_id) / COUNT(DISTINCT user_id) * 100"
+  },
+  "table_terms": {
+    "orders": {
+      "支付成功": "order_status = 1",
+      "待支付": "order_status = 2",
+      "已取消": "order_status = 3",
+      "退款中": "order_status = 4",
+      "已退款": "order_status = 5"
+    },
+    "users": {
+      "新用户": "created_at >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)",
+      "活跃用户": "last_login_at >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)",
+      "流失用户": "last_login_at < DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)"
+    }
+  },
+  "calculations": {
+    "同比增长率": "(本期值 - 上期值) / 上期值 * 100",
+    "环比增长率": "(本期值 - 上期值) / 上期值 * 100",
+    "日均值": "SUM(value) / COUNT(DISTINCT DATE(date_field))",
+    "月环比": "(本月值 - 上月值) / 上月值 * 100"
+  },
+  "time_definitions": {
+    "上周": "DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AND CURRENT_DATE()",
+    "上月": "DATE_FORMAT(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), '%Y-%m-01') AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))",
+    "本季度": "QUARTER(CURRENT_DATE()) AND YEAR(CURRENT_DATE())",
+    "今年": "YEAR(CURRENT_DATE())"
+  }
+}
